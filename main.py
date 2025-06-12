@@ -1,69 +1,55 @@
 import streamlit as st
+import random
 
-# 🎨 페이지 꾸미기
+# 🌟 페이지 설정
 st.set_page_config(
-    page_title="드라마 장르 추천기 🎬",
-    page_icon="🎭",
+    page_title="가위바위보 대결! 🎮",
+    page_icon="✌️",
     layout="centered"
 )
 
-st.markdown("# 🎬 드라마 장르 추천기")
-st.markdown("## 어떤 장르의 드라마를 보고 싶으신가요? 🤔")
+# 🎈 타이틀 및 설명
+st.title("✊ ✌️ 🖐️ 가위바위보 게임")
+st.markdown("### 당신의 선택은? 컴퓨터와 대결해보세요! 🤖")
 
-# 🌈 스타일 강조 (이모지 포함)
-st.markdown("### 💡 장르를 선택하시면 추천 드라마를 보여드려요!")
-st.markdown("---")
-
-# 🎯 장르 선택
-genre = st.selectbox(
-    "장르를 선택하세요 🎈",
-    ["로맨스 💕", "스릴러 😱", "코미디 😂", "액션 🔥", "SF 🚀", "시대극 👘", "판타지 🧚‍♂️"]
-)
-
-# 🎁 추천 딕셔너리
-recommendations = {
-    "로맨스 💕": [
-        "💖 사랑의 불시착 (Crash Landing on You)",
-        "🌸 그 해 우리는 (Our Beloved Summer)",
-        "🎶 이태원 클라쓰 (Itaewon Class)"
-    ],
-    "스릴러 😱": [
-        "🧠 시그널 (Signal)",
-        "🔪 악의 마음을 읽는 자들",
-        "🕵️ 보이스 (Voice)"
-    ],
-    "코미디 😂": [
-        "🤣 미생 (Incomplete Life)",
-        "📺 고백부부",
-        "😆 환상의 타이밍"
-    ],
-    "액션 🔥": [
-        "💥 배드 앤 크레이지 (Bad and Crazy)",
-        "🔫 태양의 후예 (Descendants of the Sun)",
-        "🚓 보이스 (Voice)"
-    ],
-    "SF 🚀": [
-        "🛸 승리호 (Space Sweepers)",
-        "🤖 너의 시간 속으로",
-        "📡 써클: 이어진 두 세계"
-    ],
-    "시대극 👘": [
-        "👑 해를 품은 달",
-        "🦢 구르미 그린 달빛",
-        "🥋 킹덤"
-    ],
-    "판타지 🧚‍♂️": [
-        "🦄 도깨비 (Goblin)",
-        "🪄 알함브라 궁전의 추억",
-        "🌌 호텔 델루나"
-    ]
+# ✨ 선택지
+options = {
+    "가위 ✌️": "scissors",
+    "바위 ✊": "rock",
+    "보 🖐️": "paper"
 }
 
-# ✨ 결과 보여주기
-st.markdown("### 🎉 추천 드라마 리스트 🎉")
+# 🎮 유저 선택
+user_choice_display = st.radio("무엇을 내시겠어요? 🎯", list(options.keys()))
 
-for drama in recommendations.get(genre, []):
-    st.markdown(f"- {drama}")
+# 컴퓨터 선택 (랜덤)
+computer_choice = random.choice(list(options.values()))
 
-st.markdown("---")
-st.markdown("📺 **드라마는 마음의 휴식입니다! 좋은 시간 보내세요! 🧘‍♂️**")
+# 변환
+user_choice = options[user_choice_display]
+
+# 🧠 승패 판단 함수
+def determine_winner(user, computer):
+    if user == computer:
+        return "😐 무승부!", "🤝 다시 도전해보세요!"
+    elif (user == "rock" and computer == "scissors") or \
+         (user == "scissors" and computer == "paper") or \
+         (user == "paper" and computer == "rock"):
+        return "🎉 승리!", "🥳 축하합니다! 당신이 이겼어요!"
+    else:
+        return "😢 패배...", "💪 다시 도전하세요!"
+
+# 버튼 클릭 시 결과 출력
+if st.button("결과 보기 🎲"):
+    result, message = determine_winner(user_choice, computer_choice)
+    
+    # 🖥️ 선택 결과 표시
+    st.markdown("---")
+    st.markdown(f"🧑 당신의 선택: **{user_choice_display}**")
+    comp_key = [k for k, v in options.items() if v == computer_choice][0]
+    st.markdown(f"🤖 컴퓨터의 선택: **{comp_key}**")
+    
+    # 결과 출력
+    st.markdown(f"## {result}")
+    st.markdown(f"### {message}")
+    st.balloons() if result == "🎉 승리!" else st.snow()
